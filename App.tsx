@@ -4,35 +4,28 @@ import Sidebar from './components/Sidebar';
 import ToolCard from './components/ToolCard';
 import SubmissionModal from './components/SubmissionModal';
 import DisclaimerModal from './components/DisclaimerModal';
+import AboutModal from './components/AboutModal';
 import { CATEGORIES } from './constants';
 import { Category } from './types';
 
 const App: React.FC = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(CATEGORIES[0].id);
-  // Initialize with the first sub-category of the first category
   const [activeSubTab, setActiveSubTab] = useState<string | null>(CATEGORIES[0].subCategories[0]?.id || null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
   const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
 
-  // Derived state for the currently active category object
   const activeCategory = useMemo(() => 
     CATEGORIES.find(c => c.id === selectedCategoryId) || CATEGORIES[0], 
   [selectedCategoryId]);
 
-  // Unified navigation handler
   const handleNavigation = (categoryId: string, subCategoryId?: string) => {
     setSelectedCategoryId(categoryId);
-    
     if (subCategoryId) {
-      // If a specific sub-category is requested (e.g. from Sidebar child click)
       setActiveSubTab(subCategoryId);
     } else {
-      // If only category is clicked, default to the first sub-category if available
-      // But only if we are switching categories. If clicking same category, keep current tab? 
-      // Usually clicking parent resets to default or toggles expand. 
-      // Here we check if we are switching categories to reset default.
       if (categoryId !== selectedCategoryId) {
         const cat = CATEGORIES.find(c => c.id === categoryId);
         if (cat && cat.subCategories.length > 0) {
@@ -44,13 +37,10 @@ const App: React.FC = () => {
     }
   };
 
-  // Filtering Logic
   const filteredContent = useMemo(() => {
-    // 1. If Searching, return a flat list of matching subcategories/tools from ALL categories
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       const results: { categoryName: string; tools: any[] }[] = [];
-
       CATEGORIES.forEach(cat => {
         const matchingTools: any[] = [];
         cat.subCategories.forEach(sub => {
@@ -66,14 +56,11 @@ const App: React.FC = () => {
       });
       return results;
     }
-
-    // 2. If not searching, return structure for the active Category
     return activeCategory;
   }, [searchQuery, activeCategory]);
 
   return (
     <div className="flex h-screen bg-slate-50 font-sans">
-      {/* Sidebar */}
       <Sidebar 
         categories={CATEGORIES} 
         selectedCategoryId={selectedCategoryId}
@@ -83,20 +70,11 @@ const App: React.FC = () => {
         closeMobileSidebar={() => setIsMobileSidebarOpen(false)}
       />
 
-      {/* Modals */}
-      <SubmissionModal 
-        isOpen={isSubmissionModalOpen} 
-        onClose={() => setIsSubmissionModalOpen(false)} 
-      />
-      <DisclaimerModal
-        isOpen={isDisclaimerOpen}
-        onClose={() => setIsDisclaimerOpen(false)}
-      />
+      <SubmissionModal isOpen={isSubmissionModalOpen} onClose={() => setIsSubmissionModalOpen(false)} />
+      <DisclaimerModal isOpen={isDisclaimerOpen} onClose={() => setIsDisclaimerOpen(false)} />
+      <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
 
-      {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-full overflow-hidden">
-        
-        {/* Header */}
         <header className="bg-white h-16 border-b border-slate-100 flex items-center justify-between px-4 lg:px-8 flex-shrink-0 z-30">
           <div className="flex items-center gap-4 w-full max-w-2xl">
             <button 
@@ -105,8 +83,6 @@ const App: React.FC = () => {
             >
               <Menu size={20} />
             </button>
-            
-            {/* Search Bar */}
             <div className="relative flex-1 group">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search size={18} className="text-slate-400 group-focus-within:text-primary transition-colors" />
@@ -139,11 +115,8 @@ const App: React.FC = () => {
           </div>
         </header>
 
-        {/* Main Scrollable Content */}
         <main className="flex-1 overflow-y-auto p-4 lg:p-8 scroll-smooth">
           <div className="max-w-7xl mx-auto space-y-8 min-h-[calc(100vh-12rem)]">
-
-            {/* View: Search Results */}
             {searchQuery ? (
                <div>
                  <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
@@ -176,15 +149,12 @@ const App: React.FC = () => {
                  )}
                </div>
             ) : (
-              /* View: Category Browse */
               <div>
-                {/* Category Header */}
                 <div className="flex items-center gap-3 mb-6">
                   {React.createElement((filteredContent as Category).icon, { className: "w-8 h-8 text-primary" })}
                   <h1 className="text-2xl font-bold text-slate-800">{(filteredContent as Category).title}</h1>
                 </div>
 
-                {/* Sub-Category Tabs */}
                 <div className="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-xl border border-slate-100 shadow-sm w-fit">
                   {(filteredContent as Category).subCategories.map((sub) => (
                     <button
@@ -201,18 +171,14 @@ const App: React.FC = () => {
                   ))}
                 </div>
 
-                {/* Tool Sections */}
                 {(filteredContent as Category).subCategories.map((sub) => {
-                  // Only show the active tab
                   if (activeSubTab && activeSubTab !== sub.id) return null;
-
                   return (
                     <div key={sub.id} className="animate-fadeIn">
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                         {sub.tools.map((tool) => (
                           <ToolCard key={tool.id} tool={tool} />
                         ))}
-                        {/* "Add New" Placeholder Card */}
                         <button 
                           onClick={() => setIsSubmissionModalOpen(true)}
                           className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 rounded-xl hover:border-primary/50 hover:bg-slate-50 transition-all group h-full min-h-[100px]"
@@ -230,12 +196,11 @@ const App: React.FC = () => {
             )}
           </div>
 
-          {/* Footer */}
           <footer className="mt-12 pt-8 border-t border-slate-200 text-center text-slate-400 text-sm pb-8">
               <div className="flex justify-center gap-6 mb-4">
                 <button onClick={() => setIsDisclaimerOpen(true)} className="hover:text-slate-600 transition-colors">免责声明</button>
-                <a href="#" className="hover:text-slate-600 transition-colors">关于本站</a>
-                <a href="#" className="hover:text-slate-600 transition-colors">联系作者</a>
+                <button onClick={() => setIsAboutOpen(true)} className="hover:text-slate-600 transition-colors">关于本站</button>
+                <button onClick={() => setIsAboutOpen(true)} className="hover:text-slate-600 transition-colors">联系作者</button>
               </div>
               <p>© 2024 TradeNavi 外贸人工具导航. All rights reserved.</p>
           </footer>

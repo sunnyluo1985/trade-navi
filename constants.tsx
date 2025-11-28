@@ -10,8 +10,6 @@ import {
   GraduationCap,
   CreditCard,
   Truck,
-  Code2,
-  Database,
   Calculator,
   ShieldCheck,
   MapPin,
@@ -266,7 +264,7 @@ export const CATEGORIES: Category[] = [
           { id: "ci3", title: "OpenCorporates", description: "全球最大的开放公司数据库", url: "https://opencorporates.com" },
           { id: "ci4", title: "Crunchbase", description: "查企业融资、高管信息", url: "https://www.crunchbase.com" },
           { id: "ci6", title: "Whois", description: "查询域名注册时间与持有人", url: "https://who.is" },
-          { id: "ci7", title: "Wayback Machine", description: "查看客户网站的历史快照", url: "https://archive.org/web/" },
+          { id: "ci7", title: "Wayback Machine", description: "查看客户网站的历史快照", url: "https://web.archive.org" },
           { id: "ci8", title: "D&B Hoovers", description: "邓白氏商业信息数据库", url: "https://www.dnb.com" }
         ]
       }
