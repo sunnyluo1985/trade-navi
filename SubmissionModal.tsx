@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Send, Github, Mail } from 'lucide-react';
-import { CATEGORIES } from '../constants';
+import { CATEGORIES } from './constants';
 
 interface SubmissionModalProps {
   isOpen: boolean;
