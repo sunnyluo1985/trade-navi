@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Category } from '../types';
+import { Category } from './types';
 import { ChevronRight, ChevronDown, Rocket } from 'lucide-react';
 
 interface SidebarProps {
