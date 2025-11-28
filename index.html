@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>外贸人工具网 - TradeNavi</title>
     <meta name="description" content="外贸人必备的工具导航网站" />
+    <!-- 引入 Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 配置 Tailwind 主题颜色 -->
     <script>
       tailwind.config = {
         theme: {
@@ -21,7 +23,7 @@
       }
     </script>
     <style>
-      /* Custom scrollbar for better aesthetics */
+      /* 自定义滚动条样式 */
       ::-webkit-scrollbar {
         width: 6px;
         height: 6px;
@@ -37,7 +39,7 @@
         background: #94a3b8;
       }
     </style>
-<script type="importmap">
+  <script type="importmap">
 {
   "imports": {
     "react": "https://aistudiocdn.com/react@^19.2.0",
@@ -47,11 +49,9 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
 </head>
   <body class="bg-background text-slate-800 antialiased overflow-hidden">
     <div id="root"></div>
     <script type="module" src="./index.tsx"></script>
-  <script type="module" src="/index.tsx"></script>
-</body>
+  </body>
 </html>
