@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ExternalLink } from 'lucide-react';
-import { Tool } from '../types';
+import { Tool } from './types';
 
 interface ToolCardProps {
   tool: Tool;
