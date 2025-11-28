@@ -1,10 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Search, Menu, MessageSquare, BookOpen, PlusCircle } from 'lucide-react';
-import Sidebar from './components/Sidebar';
-import ToolCard from './components/ToolCard';
-import SubmissionModal from './components/SubmissionModal';
-import DisclaimerModal from './components/DisclaimerModal';
-import AboutModal from './components/AboutModal';
+import Sidebar from './Sidebar';
+import ToolCard from './ToolCard';
+import SubmissionModal from './SubmissionModal';
 import { CATEGORIES } from './constants';
 import { Category } from './types';
 
@@ -14,8 +12,6 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
-  const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false);
-  const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   const activeCategory = useMemo(() => 
     CATEGORIES.find(c => c.id === selectedCategoryId) || CATEGORIES[0], 
@@ -71,8 +67,6 @@ const App: React.FC = () => {
       />
 
       <SubmissionModal isOpen={isSubmissionModalOpen} onClose={() => setIsSubmissionModalOpen(false)} />
-      <DisclaimerModal isOpen={isDisclaimerOpen} onClose={() => setIsDisclaimerOpen(false)} />
-      <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
 
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         <header className="bg-white h-16 border-b border-slate-100 flex items-center justify-between px-4 lg:px-8 flex-shrink-0 z-30">
@@ -197,11 +191,6 @@ const App: React.FC = () => {
           </div>
 
           <footer className="mt-12 pt-8 border-t border-slate-200 text-center text-slate-400 text-sm pb-8">
-              <div className="flex justify-center gap-6 mb-4">
-                <button onClick={() => setIsDisclaimerOpen(true)} className="hover:text-slate-600 transition-colors">免责声明</button>
-                <button onClick={() => setIsAboutOpen(true)} className="hover:text-slate-600 transition-colors">关于本站</button>
-                <button onClick={() => setIsAboutOpen(true)} className="hover:text-slate-600 transition-colors">联系作者</button>
-              </div>
               <p>© 2024 TradeNavi 外贸人工具导航. All rights reserved.</p>
           </footer>
         </main>
